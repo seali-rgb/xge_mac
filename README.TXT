@@ -69,8 +69,7 @@ www.systemc.org. Free membership may be required to download the core SystemC fi
 
 The testbench was developed and tested with Verilator, a free HDL simulator that
 compiles verilog into C++ or SystemC code. You can download Verilator from
-www.veripool.org. You also need to install SystemPerl and Verilog-Perl for waveform
-traces.
+www.veripool.org. Verilator is also used for waveform traces.
 
 Env/tools version are as below:   
   - SystemC: 2.3.2 or later
