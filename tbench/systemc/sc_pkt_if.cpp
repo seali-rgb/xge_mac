@@ -188,7 +188,7 @@ void pkt_if::receive() {
                         sc_stop();
                     }
 
-                    if (pkt_rx_eop && (pkt_rx_mod == ((lane+1) % 8))) {
+                    if (pkt_rx_eop && (pkt_rx_mod == (sc_uint<3> )((lane+1) % 8))) {
                         break;
                     }
                 }

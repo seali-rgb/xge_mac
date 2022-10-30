@@ -54,11 +54,11 @@ SC_MODULE(xgmii_if) {
 
     sc_in<bool> reset_xgmii_n;
 
-    sc_out<unsigned int> xgmii_rxc;
-    sc_out<sc_bv<64> > xgmii_rxd;
+    sc_out<sc_uint<8> > xgmii_rxc;
+    sc_out<sc_uint<64> > xgmii_rxd;
 
-    sc_in<unsigned int> xgmii_txc;
-    sc_in<sc_bv<64> > xgmii_txd;
+    sc_in<sc_uint<8> > xgmii_txc;
+    sc_in<sc_uint<64> > xgmii_txd;
 
   private:
 

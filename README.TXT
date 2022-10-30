@@ -72,6 +72,9 @@ compiles verilog into C++ or SystemC code. You can download Verilator from
 www.veripool.org. You also need to install SystemPerl and Verilog-Perl for waveform
 traces.
 
+Env/tools version are as below:   
+  - SystemC: 2.3.2 or later
+  - Verilator: 4.100 or later
 
 Once all the required tools are installed:
 
@@ -98,8 +101,6 @@ Simulation output:
     SCOREBOARD XGMII INTERFACE TX (60)
     SCOREBOARD PACKET INTERFACE RX (TX SIZE=60  RX SIZE=60)
     ...
-
-
 
 
 

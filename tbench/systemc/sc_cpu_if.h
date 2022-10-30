@@ -55,12 +55,12 @@ SC_MODULE(cpu_if) {
     sc_in<bool> wb_rst_i;
 
     sc_in<bool> wb_ack_o;
-    sc_in<unsigned int> wb_dat_o;
+    sc_in<sc_uint<32> > wb_dat_o;
     sc_in<bool> wb_int_o;
 
-    sc_out<unsigned int> wb_adr_i;
+    sc_out<sc_uint<8> > wb_adr_i;
     sc_out<bool> wb_cyc_i;
-    sc_out<unsigned int> wb_dat_i;
+    sc_out<sc_uint<32> > wb_dat_i;
     sc_out<bool> wb_stb_i;
     sc_out<bool> wb_we_i;
 
@@ -104,7 +104,7 @@ SC_MODULE(cpu_if) {
     sc_semaphore bus_done;
 
     uint bus_addr;
-    uint bus_data;
+    sc_uint<32> bus_data;
     bool bus_write;
 
   public:

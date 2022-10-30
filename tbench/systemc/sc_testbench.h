@@ -62,33 +62,33 @@ SC_MODULE(testbench) {
     sc_in<bool> wb_rst_i;
 
     sc_in<bool> wb_ack_o;
-    sc_in<unsigned int> wb_dat_o;
+    sc_in<sc_uint<32> > wb_dat_o;
     sc_in<bool> wb_int_o;
 
-    sc_out<unsigned int> wb_adr_i;
+    sc_out<sc_uint<8> > wb_adr_i;
     sc_out<bool> wb_cyc_i;
-    sc_out<unsigned int> wb_dat_i;
+    sc_out<sc_uint<32> > wb_dat_i;
     sc_out<bool> wb_stb_i;
     sc_out<bool> wb_we_i;
 
-    sc_out<unsigned int> xgmii_rxc;
-    sc_out<sc_bv<64> > xgmii_rxd;
+    sc_out<sc_uint<8> > xgmii_rxc;
+    sc_out<sc_uint<64> > xgmii_rxd;
 
-    sc_in<unsigned int> xgmii_txc;
-    sc_in<sc_bv<64> > xgmii_txd;
+    sc_in<sc_uint<8> > xgmii_txc;
+    sc_in<sc_uint<64> > xgmii_txd;
 
-    sc_out<sc_bv<64> > pkt_tx_data;
+    sc_out<sc_uint<64> > pkt_tx_data;
     sc_out<bool> pkt_tx_eop;
-    sc_out<unsigned int> pkt_tx_mod;
+    sc_out<sc_uint<3> > pkt_tx_mod;
     sc_out<bool> pkt_tx_sop;
     sc_out<bool> pkt_tx_val;
 
     sc_in<bool> pkt_tx_full;
 
     sc_in<bool> pkt_rx_avail;
-    sc_in<sc_bv<64> > pkt_rx_data;
+    sc_in<sc_uint<64> > pkt_rx_data;
     sc_in<bool> pkt_rx_eop;
-    sc_in<unsigned int> pkt_rx_mod;
+    sc_in<sc_uint<3> > pkt_rx_mod;
     sc_in<bool> pkt_rx_err;
     sc_in<bool> pkt_rx_sop;
     sc_in<bool> pkt_rx_val;

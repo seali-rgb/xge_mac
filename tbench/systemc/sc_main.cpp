@@ -4,8 +4,10 @@
 // Copyright 2003-2008 by Wilson Snyder. This program is free software; you can
 // redistribute it and/or modify it under the terms of either the GNU
 // General Public License or the Perl Artistic License.
+// Shen Lee: Oct-2022: 
+//  1) change waves gen to verilator
+//  2) adapt SystemC-2.3
 //====================================================================
-
 //////////////////////////////////////////////////////////////////////
 ////                                                              ////
 ////  File name "sc_main.cpp"                                     ////
@@ -15,7 +17,7 @@
 ////                                                              ////
 ////  Author(s):                                                  ////
 ////      - A. Tanguay (antanguay@opencores.org)                  ////
-////                                                              ////
+////      - Shen Lee (shen-lee@outlook.com)                       ////
 //////////////////////////////////////////////////////////////////////
 ////                                                              ////
 //// Copyright (C) 2008 AUTHORS. All rights reserved.             ////
@@ -49,15 +51,14 @@
 #include <sys/stat.h>
 
 #include "systemc.h"		// SystemC global header
-#include "SpTraceVcd.h"
-
+#include "verilated.h"
+#include "verilated_vcd_sc.h"
 #include "crc.h"
 
 #include "Vxge_mac.h"		// Top level header, generated from verilog
 
 #include "sc_testbench.h"
 #include "sc_testcases.h"
-
 
 int sc_main(int argc, char* argv[]) {
 
@@ -76,35 +77,35 @@ int sc_main(int argc, char* argv[]) {
     sc_clock clk_xgmii ("clk_xgmii", 10, 0.5, 3, true);
 
     sc_signal<bool> pkt_rx_ren;
-    sc_signal<sc_bv<64> > pkt_tx_data;
+    sc_signal<sc_uint<64> > pkt_tx_data;
     sc_signal<bool> pkt_tx_eop;
-    sc_signal<unsigned int> pkt_tx_mod;
+    sc_signal<sc_uint<3> > pkt_tx_mod;
     sc_signal<bool> pkt_tx_sop;
     sc_signal<bool> pkt_tx_val;
     sc_signal<bool> reset_156m25_n;
     sc_signal<bool> reset_xgmii_n;
-    sc_signal<unsigned int> wb_adr_i;
+    sc_signal<sc_uint<8> > wb_adr_i;
     sc_signal<bool> wb_cyc_i;
-    sc_signal<unsigned int > wb_dat_i;
+    sc_signal<sc_uint<32> > wb_dat_i;
     sc_signal<bool> wb_rst_i;
     sc_signal<bool> wb_stb_i;
     sc_signal<bool> wb_we_i;
-    sc_signal<unsigned int> xgmii_rxc;
-    sc_signal<sc_bv<64> > xgmii_rxd;
+    sc_signal<sc_uint<8> > xgmii_rxc;
+    sc_signal<sc_uint<64> > xgmii_rxd;
 
     sc_signal<bool> pkt_rx_avail;
-    sc_signal<sc_bv<64> > pkt_rx_data;
+    sc_signal<sc_uint<64> > pkt_rx_data;
     sc_signal<bool> pkt_rx_eop;
-    sc_signal<unsigned int> pkt_rx_mod;
+    sc_signal<sc_uint<3> > pkt_rx_mod;
     sc_signal<bool> pkt_rx_sop;
     sc_signal<bool> pkt_rx_val;
     sc_signal<bool> pkt_rx_err;
     sc_signal<bool> pkt_tx_full;
     sc_signal<bool> wb_ack_o;
-    sc_signal<unsigned int> wb_dat_o;
+    sc_signal<sc_uint<32> > wb_dat_o;
     sc_signal<bool> wb_int_o;
-    sc_signal<unsigned int> xgmii_txc;
-    sc_signal<sc_bv<64> > xgmii_txd;
+    sc_signal<sc_uint<8> > xgmii_txc;
+    sc_signal<sc_uint<64> > xgmii_txd;
 
     //==========
     // Part under test
@@ -202,33 +203,28 @@ int sc_main(int argc, char* argv[]) {
     tc->connect_testbench(tb);
 
 
-#if WAVES
+#if VM_TRACE
     // Before any evaluation, need to know to calculate those signals only used for tracing
     Verilated::traceEverOn(true);
 #endif
-
     // You must do one evaluation before enabling waves, in order to allow
     // SystemC to interconnect everything for testing.
     cout <<("Test initialization...\n");
-
-    sc_start(1);
+    sc_start(100, SC_NS);
 
     reset_156m25_n = 0;
     wb_rst_i = 1;
     reset_xgmii_n = 0;
 
-    sc_start(1);
-
-#if WAVES
+    sc_start(100, SC_NS);
+#if VM_TRACE
     cout << "Enabling waves...\n";
-    SpTraceFile* tfp = new SpTraceFile;
+    VerilatedVcdSc * tfp = new VerilatedVcdSc;
     top->trace (tfp, 99);
     tfp->open ("vl_dump.vcd");
 #endif
-
     //==========
     // Start of Test
-
     cout <<("Test beginning...\n");
 	
     reset_156m25_n = 0;
@@ -236,8 +232,7 @@ int sc_main(int argc, char* argv[]) {
     reset_xgmii_n = 0;
 
     while (!tc->done) {
-
-#if WAVES
+#if VM_TRACE
         tfp->flush();
 #endif
         if (VL_TIME_Q() > 10) {
@@ -246,12 +241,11 @@ int sc_main(int argc, char* argv[]) {
             reset_xgmii_n = 1;
         }
 
-        sc_start(1);
+        sc_start(100, SC_NS);
     }
-
     top->final();
 
-#if WAVES
+#if VM_TRACE
     tfp->close();
 #endif
 
