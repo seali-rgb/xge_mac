@@ -1,0 +1,5 @@
+*.log
+*.swp
+*.vcd
+tags
+obj_dir
